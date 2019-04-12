@@ -40,7 +40,7 @@ server.post('/api/projects', async (req, res) => {
   });
 
 
-  //POST for adding actions.
+  //POST for adding actions. *working*
   server.post('/api/actions', async (req, res) => {
     try {
       const [id] = await db('actions').insert(req.body);
@@ -59,28 +59,68 @@ server.post('/api/projects', async (req, res) => {
   
 
 
+//   router.get('/api/students/:id', (req, res) => {
+//     const { id } = req.params;
+//      db('projects')
+//         .where({ id: id })
+//         .then(project => {
+//           db('cohorts).where({ studentId: id }).then(cohort=> {
+//                 return res.status(200).json({ ...project, cohort: cohort });
+//           });
+//         })
+//         .catch(() => {
+//             return res
+//                 .status(500)
+//                 .json({ Error: "Student Info Error" })
+//         });
+//   });
+
+
+
+  server.get('/api/projects/:id', (req, res) => {
+    const { id } = req.params;
+     db('projects')
+        .where({ id: id })
+        .then((projects) => {
+          db('actions')
+            .where({ project_id: id })
+            .then((actions) => {
+            res.status(200).json({ 
+                // (projects)
+                ...project, cohort: cohort 
+            });
+          })
+        });
+    
+        .catch((err) =>  res.status(500).json({ message: "Student Info Error", err }))
+    
+    });
+  });
+
+
+
  //projects = cohorts
   //actions = students
 
-  // GET for retrieving a project by its id that returns an object with the following structure:
-  server.get('/:id/actions', (req, res) => {
-    const id = req.params.id;
-    db('projects')
-      .join('actions', 'actions.project_id', 'projects.id')
-      .select('actions.id', 'actions.name')
-      .where('projects.id', id)
-      .first()
-      .then(stu => {
-        if (stu) {
-          res.status(200).json(stu);
-        } else {
-          res.status(404).json({ message: 'No students were found, please try again' });
-        }
-      })
-      .catch(err => {
-        res.status(500).json(err);
-      });
- });
+//   // GET for retrieving a project by its id that returns an object with the following structure:
+//   server.get('/:id/actions', (req, res) => {
+//     const id = req.params.id;
+//     db('projects')
+//       .join('actions', 'actions.project_id', 'projects.id')
+//       .select('actions.id', 'actions.name')
+//       .where('projects.id', id)
+//       .first()
+//       .then(stu => {
+//         if (stu) {
+//           res.status(200).json(stu);
+//         } else {
+//           res.status(404).json({ message: 'No students were found, please try again' });
+//         }
+//       })
+//       .catch(err => {
+//         res.status(500).json(err);
+//       });
+//  });
 
 
 
@@ -97,16 +137,16 @@ server.get('/api/projects', async (req, res) => {
     }
   });
 
-// GET list all actions *extra*
-// server.get('/api/actions', async (req, res) => {
-//     // get the cohorts from the database
-//     try {
-//       const actions = await db('actions'); // all the records from the table
-//       res.status(200).json(actions);
-//     } catch (error) {
-//       res.status(500).json(error);
-//     }
-//   });
+// GET list all actions *extra & working*
+server.get('/api/actions', async (req, res) => {
+    // get the cohorts from the database
+    try {
+      const actions = await db('actions'); // all the records from the table
+      res.status(200).json(actions);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  });
 
 
 
