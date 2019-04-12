@@ -5,10 +5,10 @@ exports.seed = function(knex, Promise) {
     .then(function () {
       // Inserts seed entries
       return knex('actions').insert([
-        {id: 1},
-        {description: 'take an action'},
-        {notes: 'will complete mvp for this challenge'},
-        {completed: 0}
+        {"id": 1,
+        "description": 'take an action',
+        "notes": 'will complete mvp for this challenge',
+        "completed": true}
       ]);
     });
 };
