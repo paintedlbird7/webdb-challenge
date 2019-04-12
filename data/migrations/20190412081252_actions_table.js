@@ -3,8 +3,12 @@ exports.up = function(knex, Promise) {
     return knex.schema.createTable('actions', function(tbl) {
       // primary key called id, integer, auto-increment
       tbl.increments();
+
+      tbl.string("notes");
+      tbl.boolean("completed");
+      tbl.string("description");
   
-      tbl.string('name', 128).notNullable();
+    //   tbl.string('name', 128).notNullable();
   //projects = cohorts
   //actions = students
       tbl
